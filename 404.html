@@ -671,11 +671,11 @@ function init(staticryptConfig, templateConfig) {
 
         // remember the hashedPassword and set its expiration if necessary
         if (isRememberEnabled && isRememberChecked) {
-            window.localStorage.setItem(rememberPassphraseKey, hashedPassword);
+            window.sessionStorage.setItem(rememberPassphraseKey, hashedPassword);
 
             // set the expiration if the duration isn't 0 (meaning no expiration)
             if (rememberDurationInDays > 0) {
-                window.localStorage.setItem(
+                window.sessionStorage.setItem(
                     rememberExpirationKey,
                     (new Date().getTime() + rememberDurationInDays * 24 * 60 * 60 * 1000).toString()
                 );
@@ -698,8 +698,8 @@ function init(staticryptConfig, templateConfig) {
         if (typeof clearLocalStorageCallback === "function") {
             clearLocalStorageCallback();
         } else {
-            localStorage.removeItem(rememberPassphraseKey);
-            localStorage.removeItem(rememberExpirationKey);
+            sessionStorage.removeItem(rememberPassphraseKey);
+            sessionStorage.removeItem(rememberExpirationKey);
         }
     }
 
@@ -756,7 +756,7 @@ function init(staticryptConfig, templateConfig) {
 
         // if there is expiration configured, check if we're not beyond the expiration
         if (rememberDurationInDays && rememberDurationInDays > 0) {
-            const expiration = localStorage.getItem(rememberExpirationKey),
+            const expiration = sessionStorage.getItem(rememberExpirationKey),
                 isExpired = expiration && new Date().getTime() > parseInt(expiration);
 
             if (isExpired) {
@@ -765,7 +765,7 @@ function init(staticryptConfig, templateConfig) {
             }
         }
 
-        const hashedPassword = localStorage.getItem(rememberPassphraseKey);
+        const hashedPassword = sessionStorage.getItem(rememberPassphraseKey);
 
         if (hashedPassword) {
             // try to decrypt
@@ -847,7 +847,7 @@ exports.init = init;
 
                     // show the remember me checkbox
                     if (isRememberEnabled) {
-                        document.getElementById("staticrypt-remember-label").classList.remove("hidden");
+                        void 0;
                     }
                 }
             };
